@@ -4,36 +4,73 @@ import java.util.HashMap;
 import spark.ModelAndView;
 import static spark.Spark.*;
 import spark.template.thymeleaf.ThymeleafTemplateEngine;
+import tikape.runko.database.AnnosDao;
 import tikape.runko.database.Database;
-import tikape.runko.database.OpiskelijaDao;
+import tikape.runko.database.AnnosRaakaAineDao;
+import tikape.runko.database.RaakaAineDao;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
-        Database database = new Database("jdbc:sqlite:opiskelijat.db");
+        Database database = new Database("jdbc:sqlite:pirtelot.db");
         database.init();
 
-        OpiskelijaDao opiskelijaDao = new OpiskelijaDao(database);
+        AnnosRaakaAineDao annosRaakaAineDao = new AnnosRaakaAineDao(database);
+        AnnosDao annosDao = new AnnosDao(database);
+        RaakaAineDao raakaAineDao = new RaakaAineDao(database);
 
         get("/", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("viesti", "tervehdys");
+            map.put("viesti", "Saisiko olla pirtelö :-)");
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
+        
+        
 
-        get("/opiskelijat", (req, res) -> {
+        get("/annokset", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("opiskelijat", opiskelijaDao.findAll());
+            map.put("annokset", annosDao.findAll());
 
-            return new ModelAndView(map, "opiskelijat");
+            return new ModelAndView(map, "annokset");
         }, new ThymeleafTemplateEngine());
 
-        get("/opiskelijat/:id", (req, res) -> {
+        get("/annokset/:id", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("opiskelija", opiskelijaDao.findOne(Integer.parseInt(req.params("id"))));
+            map.put("annos", annosDao.findOne(Integer.parseInt(req.params("id"))));
 
-            return new ModelAndView(map, "opiskelija");
+            return new ModelAndView(map, "annos");
+        }, new ThymeleafTemplateEngine());
+        
+        
+
+        get("/raakaAineet", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("raakaAineet", raakaAineDao.findAll());
+
+            return new ModelAndView(map, "raakaAineet");
+        }, new ThymeleafTemplateEngine());
+
+        get("/raakaAineet/:id", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("raakaAine", annosDao.findOne(Integer.parseInt(req.params("id"))));
+
+            return new ModelAndView(map, "raakaAine");
+        }, new ThymeleafTemplateEngine());
+        
+        
+        get("/annosRaakaAineet", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("annosRaakaAineet", annosRaakaAineDao.findAll());
+
+            return new ModelAndView(map, "annosRaakaAineet");
+        }, new ThymeleafTemplateEngine());
+
+        get("/annosRaakaAineet/:id", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("annosRaakaAine", annosRaakaAineDao.findOne(Integer.parseInt(req.params("id"))));
+
+            return new ModelAndView(map, "annosRaakaAine");
         }, new ThymeleafTemplateEngine());
     }
 }

@@ -1,0 +1,18 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Annos raaka-aineet</title>
+        <meta charset="utf-8" />
+    </head>
+
+    <body>
+        <h1>Annos raaka-aineet:</h1>
+
+        <ol>
+            <li th:each= "annosRaakaAine: ${annosRaakaAineet}">
+                <span th:text="${annosRaakaAine.ohje}">Valmistusohjeet ?</span> <a th:href="${'/annosRaakaAineet/' + annosRaakaAine.annos_id}">linkki</a>
+            </li>
+        </ol>
+    </body>
+</html>
