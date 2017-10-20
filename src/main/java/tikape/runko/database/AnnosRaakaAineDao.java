@@ -69,6 +69,31 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
 
         return annosRaakaAineet;
     }
+    
+    public List<AnnosRaakaAine> findRecipe(Integer annos_id) throws SQLException {
+
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine where annos_id = ?");
+
+        ResultSet rs = stmt.executeQuery();
+        List<AnnosRaakaAine> annosResepti = new ArrayList<>();
+        while (rs.next()) {
+
+        annos_id = rs.getInt("annos_id");
+        Integer raaka_aine_id = rs.getInt("raaka_aine_id");
+        Integer jarjestys = rs.getInt("jarjestys");
+        Float maara = rs.getFloat("maara");
+        String ohje = rs.getString("ohje");
+
+        annosResepti.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return annosResepti;
+    }
 
     @Override
     public void delete(Integer key) throws SQLException {

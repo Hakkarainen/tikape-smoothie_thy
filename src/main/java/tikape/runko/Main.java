@@ -25,8 +25,6 @@ public class Main {
 
             return new ModelAndView(map, "index");
         }, new ThymeleafTemplateEngine());
-        
-        
 
         get("/annokset", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -37,12 +35,12 @@ public class Main {
 
         get("/annokset/:id", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("annos", annosDao.findOne(Integer.parseInt(req.params("id"))));
+            int tmp = Integer.parseInt(req.params("id"));
+            System.out.println(tmp);
+            map.put("annos", annosDao.findOne(tmp));
 
             return new ModelAndView(map, "annos");
         }, new ThymeleafTemplateEngine());
-        
-        
 
         get("/raakaAineet", (req, res) -> {
             HashMap map = new HashMap<>();
@@ -57,13 +55,19 @@ public class Main {
 
             return new ModelAndView(map, "raakaAine");
         }, new ThymeleafTemplateEngine());
-        
-        
+
         get("/annosRaakaAineet", (req, res) -> {
             HashMap map = new HashMap<>();
             map.put("annosRaakaAineet", annosRaakaAineDao.findAll());
 
             return new ModelAndView(map, "annosRaakaAineet");
+        }, new ThymeleafTemplateEngine());
+
+        get("/annosResepti/:annos_id", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("annosResepti", annosRaakaAineDao.findAll());
+
+            return new ModelAndView(map, "annosResepti");
         }, new ThymeleafTemplateEngine());
 
         get("/annosRaakaAineet/:id", (req, res) -> {
