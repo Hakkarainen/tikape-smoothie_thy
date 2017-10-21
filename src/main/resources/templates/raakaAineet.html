@@ -2,17 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Raaka-aineet</title>
         <meta charset="utf-8" />
+        <title>Raaka-aineet</title>
     </head>
 
     <body>
         <h1>Raaka-aineet:</h1>
 
-        <ol>
+        <ul>                                        
             <li th:each="raakaAine: ${raakaAineet}">
-                <span th:text="${raakaAine.nimi}">raaka-aineen nimi</span> <a th:href="${'/raakaAineet/' + raakaAine.id}">linkki</a>
+                <span th:text="${raakaAine.nimi}">raaka-aineen nimi</span> <a th:href="${'/raakaAine/' + raakaAine.id}">linkki</a>
             </li>
-        </ol>
+        </ul>
+        
+        <ul>
+            <li>
+                <a href="../annokset">Smoothielistaukseen</a>
+            </li>
+        </ul>
+        
     </body>
 </html>

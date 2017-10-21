@@ -2,57 +2,24 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Annos resepti</title>
         <meta charset="utf-8" />
+        <title>Annos raaka-aineet</title>
     </head>
 
-<h2>Smoothiet</h2>
+    <body>
+        <h1>Annos raaka-aineet:</h1>
 
-<ul>
-
-    <li th:each="annos: ${annokset}">
-        <span th:text="${annos.nimi}">annoksen nimi</span> <a th:href="${'/reseptit/' + annos.id}">linkki</a>
-    </li>
-
-</ul>
-
-
-<h4>Lisää uusi</h4>
-
-<form method="POST" action="">
-    Smoothien nimi:<br/>
-    <input type="text" name="aine"/><br/>
-    <input type="submit" value="Lisää"/>
-</form>
-
-<h4>Lisää raaka-aineita</h4>
-
-<form method="POST" action="">
-    Smoothien nimi:<br/>
-    <select name="smoothie">
-        <option name="2">Aurinkolasit</option>
-        <option name="1">Mustikkaplorays</option>
-    </select>
-    <br/>
-    Lisättävä raaka-aine<br/>
-    <select name="raakaAine">
-        <option name="1">Appelsiini</option>
-        <option name="2">Banaani</option>
-        <option name="...">...</option>
-    </select>
-    <br/>
-    Järjestys<br/>
-    <input type="text"/><br/>
-    Määrä<br/>
-    <input type="text"/><br/>
-    Ohje<br/>
-    <input type="text"/><br/>
-    <input type="submit" value="Lisää"/>
-</form>
-
-<ul>
-    <li>
-        <p><a href="/annokset">Tästä annokset-listaukseen.</a></p>
-    </li>
-</ul>
+        <ol>
+            <li th:each= "annosRaakaAine: ${annosResepti}">
+                <span th:text="${annosRaakaAine.get_Raaka_aine_id()}">Valmistusohjeet ?</span> <a th:href="${'/annosRaakaAine/' + annosRaakaAine.get_Raaka_aine_id()}">linkki</a>
+            </li>
+        </ol>
+        
+        <ul>
+            <li>
+                <a href="../annokset">Smoothielistaukseen</a>
+            </li>
+        </ul>
+        
+    </body>
 </html>

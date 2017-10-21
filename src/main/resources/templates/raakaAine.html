@@ -2,13 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Raaka-aine</title>
         <meta charset="utf-8" />
+        <title>Raaka-aine</title>
     </head>
 
     <body>
         <h1><span th:text="${raakaAine.nimi}">raaka-aine</span>!</h1>
 
         <p>Olet saapunut <span th:text="${raakaAine.nimi}">raaka-aine</span> sivulle.</p>
+        
+        <ul>
+            <li>
+                <a href="../annokset">Smoothielistaukseen</a>
+            </li>
+        </ul>
+        
     </body>
 </html>

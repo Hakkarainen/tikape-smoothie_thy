@@ -2,13 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Valmistusohjeet</title>
         <meta charset="utf-8" />
+        <title>Annos raaka-aine</title>
     </head>
 
     <body>
-        <h1><span th:text="${RaakaAine.nimi}">Valmistusohjeet ?</span>!</h1>
-
-        <p><span th:text="${annosRaakaAine.ohje}">Valmistusohjeet ?</span></p>
+        <p> th:text="${annosRaakaAine.jarjestys}">Järjestysnumero</p>
+        <p> th:text="${annosRaakaAine.maara}">Määrä g tai dl</p>
+        <p> th:text="${annosRaakaAine.ohje}">Valmistusohjeet</p>
+        
+        <ul>
+            <li>
+                <a href="../annokset">Smoothielistaukseen</a>
+            </li>
+        </ul>
+        
     </body>
 </html>

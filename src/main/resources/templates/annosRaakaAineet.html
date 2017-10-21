@@ -2,8 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head>
-        <title>Annos raaka-aineet</title>
         <meta charset="utf-8" />
+        <title>Annos raaka-aineet</title>
     </head>
 
     <body>
@@ -11,8 +11,15 @@
 
         <ol>
             <li th:each= "annosRaakaAine: ${annosRaakaAineet}">
-                <span th:text="${annosRaakaAine.ohje}">Valmistusohjeet ?</span> <a th:href="${'/annosRaakaAineet/' + annosRaakaAine.annos_id}">linkki</a>
+                <span th:text="${annosRaakaAine.ohje}">Valmistusohjeet ?</span> <a th:href="${'/annosRaakaAine/' + annosRaakaAine.annos_id}">linkki</a>
             </li>
         </ol>
+        
+        <ul>
+            <li>
+                <a href="../annokset">Smoothielistaukseen</a>
+            </li>
+        </ul>
+        
     </body>
 </html>

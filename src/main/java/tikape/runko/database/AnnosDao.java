@@ -44,6 +44,30 @@ public class AnnosDao implements Dao<Annos, Integer> {
 
         return a;
     }
+    
+    
+    public void insertOne(String nimi) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Annos (nimi) VALUES ('Ananas-banaani pirtelö');");
+//        stmt.setObject(1, nimi);
+//        
+//        ResultSet rs = stmt.executeQuery();
+//        boolean hasOne = rs.next();
+//        if (!hasOne) {
+//            return null;
+//        }
+//
+//        Integer id = rs.getInt("id");
+//        
+//        Annos ua = new Annos(id, nimi);
+//
+//        rs.close();
+        stmt.close();
+        connection.close();
+        
+//        return ua;
+    }
+    
 
     @Override
     public List<Annos> findAll() throws SQLException {

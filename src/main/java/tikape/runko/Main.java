@@ -33,13 +33,31 @@ public class Main {
             return new ModelAndView(map, "annokset");
         }, new ThymeleafTemplateEngine());
 
-        get("/annokset/:id", (req, res) -> {
+        get("/annos/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             int tmp = Integer.parseInt(req.params("id"));
             System.out.println(tmp);
             map.put("annos", annosDao.findOne(tmp));
 
             return new ModelAndView(map, "annos");
+        }, new ThymeleafTemplateEngine());   
+        
+        get("/uusiAnnos/:nimi", (req, res) -> {
+            HashMap map = new HashMap<>();
+            String tmp = req.params("nimi");
+            //System.out.println(tmp);
+            map.put("uusiAnnos", annosDao.insertOne(tmp));
+
+            return new ModelAndView(map, "uusiAnnos");
+        }, new ThymeleafTemplateEngine());
+        
+        post("/uusiAnnos/:nimi", (req, res) -> {
+            HashMap map = new HashMap<>();
+            String tmp = req.params("nimi");
+            //System.out.println(tmp);
+            map.put("uusiAnnos", annosDao.insertOne(tmp));
+
+            return new ModelAndView(map, "uusiAnnos");
         }, new ThymeleafTemplateEngine());
 
         get("/raakaAineet", (req, res) -> {
@@ -49,11 +67,31 @@ public class Main {
             return new ModelAndView(map, "raakaAineet");
         }, new ThymeleafTemplateEngine());
 
-        get("/raakaAineet/:id", (req, res) -> {
+        get("/raakaAine/:id", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("raakaAine", annosDao.findOne(Integer.parseInt(req.params("id"))));
+            int tmp = Integer.parseInt(req.params("id"));
+            System.out.println(tmp);
+            map.put("raakaAine", annosDao.findOne(tmp));
 
             return new ModelAndView(map, "raakaAine");
+        }, new ThymeleafTemplateEngine());
+        
+        get("/uusiRaakaAine/:nimi", (req, res) -> {
+            HashMap map = new HashMap<>();
+            String tmp = req.params("nimi");
+            System.out.println(tmp);
+            map.put("uusiRaakaAine", annosDao.insertOne(tmp));
+
+            return new ModelAndView(map, "uusiRaakaAine");
+        }, new ThymeleafTemplateEngine());
+
+        post("/uusiRaakaAine/:nimi", (req, res) -> {
+            HashMap map = new HashMap<>();
+            String tmp = req.params("nimi");
+            System.out.println(tmp);
+            map.put("uusiRaakaAine", annosDao.insertOne(tmp));
+
+            return new ModelAndView(map, "uusiRaakaAine");
         }, new ThymeleafTemplateEngine());
 
         get("/annosRaakaAineet", (req, res) -> {
@@ -63,16 +101,20 @@ public class Main {
             return new ModelAndView(map, "annosRaakaAineet");
         }, new ThymeleafTemplateEngine());
 
-        get("/annosResepti/:annos_id", (req, res) -> {
+        get("/annosResepti/:id", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("annosResepti", annosRaakaAineDao.findAll());
+            int tmp = Integer.parseInt(req.params("id"));
+            System.out.println(tmp);
+            map.put("annosResepti", annosRaakaAineDao.findRecipe(tmp));
 
             return new ModelAndView(map, "annosResepti");
         }, new ThymeleafTemplateEngine());
 
-        get("/annosRaakaAineet/:id", (req, res) -> {
+        get("/annosRaakaAine/:id", (req, res) -> {
             HashMap map = new HashMap<>();
-            map.put("annosRaakaAine", annosRaakaAineDao.findOne(Integer.parseInt(req.params("id"))));
+            int tmp = Integer.parseInt(req.params("id"));
+            System.out.println(tmp);
+            map.put("annosRaakaAine", annosRaakaAineDao.findOne(tmp));
 
             return new ModelAndView(map, "annosRaakaAine");
         }, new ThymeleafTemplateEngine());

@@ -1,4 +1,3 @@
-
 package tikape.runko.database;
 
 import java.sql.Connection;
@@ -18,10 +17,10 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
     }
 
     @Override
-    public AnnosRaakaAine findOne(Integer key) throws SQLException {
+    public AnnosRaakaAine findOne(Integer annos_id) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine WHERE id = ?");
-        stmt.setObject(1, key);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine WHERE annos_id = ?");
+        stmt.setObject(1, annos_id);
 
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
@@ -29,7 +28,7 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
             return null;
         }
 
-        Integer annos_id = rs.getInt("annos_id");
+        annos_id = rs.getInt("annos_id");
         Integer raaka_aine_id = rs.getInt("raaka_aine_id");
         Integer jarjestys = rs.getInt("jarjestys");
         Float maara = rs.getFloat("maara");
@@ -44,6 +43,7 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         return ara;
     }
 
+    
     @Override
     public List<AnnosRaakaAine> findAll() throws SQLException {
 
@@ -54,13 +54,13 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         List<AnnosRaakaAine> annosRaakaAineet = new ArrayList<>();
         while (rs.next()) {
 
-        Integer annos_id = rs.getInt("annos_id");
-        Integer raaka_aine_id = rs.getInt("raaka_aine_id");
-        Integer jarjestys = rs.getInt("jarjestys");
-        Float maara = rs.getFloat("maara");
-        String ohje = rs.getString("ohje");
+            Integer annos_id = rs.getInt("annos_id");
+            Integer raaka_aine_id = rs.getInt("raaka_aine_id");
+            Integer jarjestys = rs.getInt("jarjestys");
+            Float maara = rs.getFloat("maara");
+            String ohje = rs.getString("ohje");
 
-        annosRaakaAineet.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
+            annosRaakaAineet.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
         }
 
         rs.close();
@@ -69,23 +69,24 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
 
         return annosRaakaAineet;
     }
+
     
     public List<AnnosRaakaAine> findRecipe(Integer annos_id) throws SQLException {
 
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine where annos_id = ?");
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine where AnnosRaakaAine.annos_id = annos_id");
 
         ResultSet rs = stmt.executeQuery();
         List<AnnosRaakaAine> annosResepti = new ArrayList<>();
         while (rs.next()) {
 
-        annos_id = rs.getInt("annos_id");
-        Integer raaka_aine_id = rs.getInt("raaka_aine_id");
-        Integer jarjestys = rs.getInt("jarjestys");
-        Float maara = rs.getFloat("maara");
-        String ohje = rs.getString("ohje");
+            annos_id = rs.getInt("annos_id");
+            Integer raaka_aine_id = rs.getInt("raaka_aine_id");
+            Integer jarjestys = rs.getInt("jarjestys");
+            Float maara = rs.getFloat("maara");
+            String ohje = rs.getString("ohje");
 
-        annosResepti.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
+            annosResepti.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
         }
 
         rs.close();
@@ -93,6 +94,18 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         connection.close();
 
         return annosResepti;
+    }
+
+    
+    public void makeRecipe(Integer annos_id, Integer raaka_aine_id,  Integer jarjestys, Float maara, String ohje) throws SQLException {
+
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO AnnosRaakaAine (annos_id, raaka_aine_id, jarjestys, maara, ohje) "
+                + "VALUES (1, 1, 1, 100, 'Ananas-banaani pirtelön ohje');");
+
+        stmt.close();
+        connection.close();
+
     }
 
     @Override
