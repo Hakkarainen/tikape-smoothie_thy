@@ -9,10 +9,10 @@
     <body>
 
         <h2>Smoothiet</h2>
-                                                                                                        
+
         <ul>
             <li th:each="annos: ${annokset}">
-            <a th:href="${annos.nimi}">annoksen nimi</a> <a th:href="${'/annosResepti/' + annos.id}">annoksen raaka-aineet</a>) (<a th:href="${'/poistaAnnos/' + annos.id}}">poista</a>)
+                <a th:href="${annos.nimi}">annoksen nimi</a> <a th:href="${'/annosResepti/' + annos.id}">annoksen raaka-aineet</a>) (<a th:href="${'/poistaAnnos/' + annos.id}}">poista</a>)
             </li>
         </ul>
 
@@ -21,38 +21,38 @@
 
         <form method="POST" action="/uusiAnnos/:nimi">
             Smoothien nimi:<br/>
-            <input type="text" name="smoothie"/><br/>
+            <input type="text" name="nimi" maxlength="100" required="required"/><br/>
             <input type="submit" value="Lisää"/>
         </form>
 
-        <h4>Lisää raaka-aineita</h4>
+        <h4>Lisää annokseen raaka-aine</h4>
 
-        <form method="POST" action="/lisaaRaakaAine">
+        <form method="POST" action="/lisaaAnnosRaakaAineReseptiin/:annoksenNimi :raakaAineenNimi :jarjestys :maara :ohje">
             Smoothien nimi:<br/>
             <ul>
                 <li th:each="annos: ${annokset}">
-                    <select name="smoothie">
-                        <option th:text="${annos.nimi}">Smoothie<a th:href="${'/annokset/' + annos.id}">annos</a></option>
+                    <select name="annoksenNimi">
+                        <option th:text="${annos.nimi}">Smoothie</option>
                     </select>
                 </li>
             </ul>
 
             <br/>
             Lisättävä raaka-aine<br/>
-            <select name="raakaAine">
-                <ul>
-                    <li th:each="raakaAine: ${raakaAineet}">
-                        <option th:text="${raakaAine.nimi}">Smoothie<a th:href="${'/lisaaRaakaAine/' + raakaAine.id}">annos</a></option>
-                    </li>
-                </ul>
-            </select>
+            <ul>
+                <li th:each="raakaAine: ${raakaAineet}">
+                    <select name="raakaAineenNimi">
+                        <option th:text="${raakaAine.nimi}">Smoothie</option>
+                    </select>
+                </li>
+            </ul>
             <br/>
             Järjestys<br/>
-            <input type="text"/><br/>
+            <input type="text" name="jarjestys" required="required"/><br/>
             Määrä<br/>
-            <input type="text"/><br/>
+            <input type="text" name="maara" required="required"/><br/>
             Ohje<br/>
-            <input type="text"/><br/>
+            <input type="text" name="ohje" maxlength="255" required="required" /><br/>
             <input type="submit" value="Lisää"/>
         </form>
 

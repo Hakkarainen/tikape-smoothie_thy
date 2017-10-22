@@ -34,6 +34,20 @@ public class Database {
             System.out.println("Error >> " + t.getMessage());
         }
     }
+    
+        public int update(String updateQuery, Object... params) throws SQLException {
+        PreparedStatement stmt = this.getConnection().prepareStatement(updateQuery);
+
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
+        }
+
+        int changes = stmt.executeUpdate();
+
+        stmt.close();
+
+        return changes;
+    } 
 
     private List<String> sqliteLauseet() {
         ArrayList<String> lista = new ArrayList<>();

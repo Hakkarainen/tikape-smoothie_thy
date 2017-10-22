@@ -20,6 +20,24 @@ public class AnnosDao implements Dao<Annos, Integer> {
     public AnnosDao(Database database) {
         this.database = database;
     }
+    
+        
+    public Annos insertOne(Annos a) throws SQLException {
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Annos (nimi) VALUES (?)");
+        stmt.setString(1, a.getNimi());
+        
+        stmt.executeUpdate();
+        
+        System.out.println("LISÄTÄÄN UUSI ANNOS");
+
+        //int i = getNewid(connection); Tarvitaanko tätä?
+        //ara.setId(i); 
+
+        stmt.close();
+        connection.close();
+        return a; 
+    }
 
     @Override
     public Annos findOne(Integer key) throws SQLException {
@@ -45,30 +63,25 @@ public class AnnosDao implements Dao<Annos, Integer> {
         return a;
     }
     
-    
-    public void insertOne(String nimi) throws SQLException {
+     public Annos findOneByNimi(String nimi) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Annos (nimi) VALUES ('Ananas-banaani pirtelö');");
-//        stmt.setObject(1, nimi);
-//        
-//        ResultSet rs = stmt.executeQuery();
-//        boolean hasOne = rs.next();
-//        if (!hasOne) {
-//            return null;
-//        }
-//
-//        Integer id = rs.getInt("id");
-//        
-//        Annos ua = new Annos(id, nimi);
-//
-//        rs.close();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Annos WHERE nimi = ?");
+        stmt.setString(1, nimi);
+
+        ResultSet rs = stmt.executeQuery(); 
+        Annos a = null;
+        if (rs.next()) {
+            a = new Annos(rs.getInt("id"), rs.getString("nimi"));
+        }
+
+        rs.close();
         stmt.close();
         connection.close();
-        
-//        return ua;
+
+        return a;
     }
     
-
+    
     @Override
     public List<Annos> findAll() throws SQLException {
 
@@ -90,10 +103,14 @@ public class AnnosDao implements Dao<Annos, Integer> {
 
         return annokset;
     }
-
+    
+    public void save(Annos annos) throws SQLException {
+        this.database.update("INSERT INTO Annos(nimi) VALUES (?)", annos.getNimi());
+    }
+    
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+        this.database.update("DELETE FROM Annos WHERE id = ?", key);        
     }
 
 }

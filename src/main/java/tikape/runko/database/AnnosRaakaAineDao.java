@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import tikape.runko.domain.AnnosRaakaAine;
@@ -14,6 +15,27 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
 
     public AnnosRaakaAineDao(Database database) {
         this.database = database;
+    }
+    
+    public AnnosRaakaAine insertOne(AnnosRaakaAine ara) throws SQLException {
+        Connection connection = this.database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO AnnosRaakaAine (jarjestys, maara, ohje) VALUES (?, ?, ?)");
+        stmt.setInt(1, ara.get_Annos_id());
+        stmt.setInt(2, ara.get_Raaka_aine_id());
+        stmt.setInt(3, ara.getJarjestys());
+        stmt.setFloat(4, ara.getMaara());
+        stmt.setString(5, ara.getOhje());
+        
+        stmt.executeUpdate();
+        
+        System.out.println("LISÄTÄÄN RAAKA AINE ANNOKSEEN");
+
+        //int i = getNewid(connection); Tarvitaanko tätä?
+        //ara.setId(i); 
+
+        stmt.close();
+        connection.close();
+        return ara; 
     }
 
     @Override
@@ -43,7 +65,6 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         return ara;
     }
 
-    
     @Override
     public List<AnnosRaakaAine> findAll() throws SQLException {
 
@@ -70,7 +91,6 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         return annosRaakaAineet;
     }
 
-    
     public List<AnnosRaakaAine> findRecipe(Integer annos_id) throws SQLException {
 
         Connection connection = database.getConnection();
@@ -96,21 +116,48 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         return annosResepti;
     }
 
-    
-    public void makeRecipe(Integer annos_id, Integer raaka_aine_id,  Integer jarjestys, Float maara, String ohje) throws SQLException {
+    public void mixRecipe(String annoksenNimi, String raakaAineenNimi, Integer jarjestys, Float maara, String ohje) throws SQLException {
+        
+        List<String> lauseet = sqliteLauseet();
 
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO AnnosRaakaAine (annos_id, raaka_aine_id, jarjestys, maara, ohje) "
-                + "VALUES (1, 1, 1, 100, 'Ananas-banaani pirtelön ohje');");
+        // "try with resources" sulkee resurssin automaattisesti lopuksi
+        try (Connection connection = database.getConnection()) {
+            Statement stmt = connection.createStatement();
 
-        stmt.close();
-        connection.close();
+            // suoritetaan komennot
+            for (String lause : lauseet) {
+                System.out.println("Running command >> " + lause);
+                stmt.executeUpdate(lause);
+            }
 
+//            stmt.close();
+//            connection.close();
+
+        } catch (Throwable t) {
+            // virheilmoitus
+            System.out.println("Error >> " + t.getMessage());
+        }
     }
 
+    private List<String> sqliteLauseet() {
+        ArrayList<String> lista = new ArrayList<>();
+
+//      AnnosRaakaAine liitostaulun ylläpitoon tarvittavat komennot suoritusjärjestyksessä
+        lista.add("SELECT annos_id FROM Annos WHERE name = annos");
+        lista.add("SELECT raaka_aine_id FROM RaakaAine WHERE name = raaka_aine");
+
+        lista.add("INSERT INTO AnnosRaakaAine (Annos.annos_id, RaakaAine.raaka_aine_id, jarjestys, maara, ohje) "
+                + "VALUES (annos_id, raaka_aine_id, jarjestys, maara, (annos + 'pirtelön ohje'));");
+
+    return lista ;
+}
+    
+    public void save(AnnosRaakaAine annosRaakaAine) throws SQLException {
+        this.database.update("INSERT INTO AnnosRaakaAine(annos_id) VALUES (?)", annosRaakaAine.get_Annos_id());
+    }
+    
     @Override
     public void delete(Integer key) throws SQLException {
-        // ei toteutettu
+        this.database.update("DELETE FROM AnnosRaakaAine WHERE id = ?", key);        
     }
-
 }

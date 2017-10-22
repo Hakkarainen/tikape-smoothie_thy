@@ -7,15 +7,18 @@
     </head>
 
     <body>
-        <p> th:text="${annosRaakaAine.jarjestys}">Järjestysnumero</p>
-        <p> th:text="${annosRaakaAine.maara}">Määrä g tai dl</p>
-        <p> th:text="${annosRaakaAine.ohje}">Valmistusohjeet</p>
+        <ul>
+                <li>th:text="${annosRaakaAine.jarjestys}">Järjestysnumero</li>
+                <li>th:text="${annosRaakaAine.maara}">Määrä grammaa tai desilitraa.</li>
+                <li>th:text="${annosRaakaAine.ohje}">Valmistusohjeet</li>
+        </ul>
+        
         
         <ul>
             <li>
                 <a href="../annokset">Smoothielistaukseen</a>
             </li>
         </ul>
-        
+
     </body>
 </html>
