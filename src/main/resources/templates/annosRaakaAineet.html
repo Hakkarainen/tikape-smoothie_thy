@@ -11,17 +11,15 @@
 
         <ol>
             <li th:each= "annosRaakaAine: ${annosRaakaAineet}">
-                <span th:text="${annosRaakaAine.annos_id}">Annos</span>
-                <span th:text="${annosRaakaAine.raaka_aine_id}">Raaka-aine</span> <a th:href="${'/annosRaakaAine/' + annosRaakaAine.raaka_aine_id}">linkki</a>
-                <span th:text="${annosRaakaAine.jarjestys}">Järjestys</span> 
-                <span th:text="${annosRaakaAine.maara}">Määrä</span>
-                <span th:text="${annosRaakaAine.ohje}">Valmistusohjeet</span>
+               <p>Jarjestys<span th:text="${Integer.parseInt(annosRaakaAine.jarjestys)}">jarjestys</span></p>
+                <p>Maara<span th:text="${Integer.parseInt(annosRaakaAine.maara)}"> grammaa tai desilitraa</span></p> 
+                <p>Valmistusohje<span th:text="${annosRaakaAine.ohje}">ohje</span></p>
             </li>
         </ol>
 
         <ul>
             <li>
-                <a href="../annokset">Smoothielistaukseen</a>
+                <a href="/annokset">Smoothielistaukseen</a>
             </li>
         </ul>
 

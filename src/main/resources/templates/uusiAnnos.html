@@ -12,23 +12,17 @@
 
         <ul>
             <li th:each="annos: ${annokset}">
-                <a th:href="${annos.nimi}">annoksen nimi</a> <a th:href="${'/annosResepti/' + annos.id}">annoksen raaka-aineet</a>) (<a th:href="${'/poistaAnnos/' + annos.id}}">poista</a>)
+                <a th:href="${annos.nimi}">annoksen nimi</a> <a th:href="${'/annosResepti/' + annos.id}">annoksen raaka-aineet</a> (<a th:href="${'/poistaAnnos/' + annos.nimi}}">poista</a>)
             </li>
         </ul>
 
 
-        <h4>Lisää uusi</h4>
+        <h4>Lisaa uusi</h4>
 
         <form method="POST" action="/uusiAnnos/:nimi">
             Smoothien nimi:<br/>
-            <input type="text" name="nimi" maxlength="100" required="required"/><br/>
-            <input type="submit" value="Lisää"/>
-        </form>
-
-        <h4>Lisää annokseen raaka-aine</h4>
-
-        <form method="POST" action="/lisaaAnnosRaakaAineReseptiin/:annoksenNimi :raakaAineenNimi :jarjestys :maara :ohje">
-            Smoothien nimi:<br/>
+            <input type="text" name="annoksenNimi" maxlength="100" required="required"/><br/>
+            <input type="submit" value="Lisaa"/>
             <ul>
                 <li th:each="annos: ${annokset}">
                     <select name="annoksenNimi">
@@ -36,9 +30,16 @@
                     </select>
                 </li>
             </ul>
+        </form>
 
+        <h4>Miksaa annokseen uusi raaka-aine</h4>
+
+        <form method="POST" action="/lisaaAnnosRaakaAineReseptiin">
+            Smoothien nimi:<br/>
+            <input type="text" name="nimi" maxlength="100" required="required"/><br/>
             <br/>
-            Lisättävä raaka-aine<br/>
+            Uusi raaka-aine<br/>
+            <input type="text" name="raakaAineenNimi" maxlength="100" required="required"/><br/>
             <ul>
                 <li th:each="raakaAine: ${raakaAineet}">
                     <select name="raakaAineenNimi">
@@ -47,13 +48,13 @@
                 </li>
             </ul>
             <br/>
-            Järjestys<br/>
+            Jarjestys<br/>
             <input type="text" name="jarjestys" required="required"/><br/>
-            Määrä<br/>
+            Maara<br/>
             <input type="text" name="maara" required="required"/><br/>
             Ohje<br/>
             <input type="text" name="ohje" maxlength="255" required="required" /><br/>
-            <input type="submit" value="Lisää"/>
+            <input type="submit" value="Lisaa"/>
         </form>
 
         <ul>

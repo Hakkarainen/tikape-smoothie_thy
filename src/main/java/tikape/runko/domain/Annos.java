@@ -2,8 +2,12 @@ package tikape.runko.domain;
 
 public class Annos {
 
-    private Integer id;
+    private Integer id = null;
     private String nimi;
+
+    public Annos(String nimi) {
+        this.nimi = nimi;
+    }
 
     public Annos(Integer id, String nimi) {
         this.id = id;

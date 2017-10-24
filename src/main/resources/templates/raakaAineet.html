@@ -11,13 +11,13 @@
 
         <ul>                                        
             <li th:each="raakaAine: ${raakaAineet}">
-                <span th:text="${raakaAine.nimi}">raaka-aineen nimi</span> <a th:href="${'/raakaAine/' + raakaAine.id}">linkki</a>
+                <a th:text="${raakaAine.nimi}" th:href="${'/raakaAine/' + raakaAine.id}"></a>
             </li>
         </ul>
         
         <ul>
             <li>
-                <a href="../annokset">Smoothielistaukseen</a>
+                <a href="/annokset">Smoothielistaukseen</a>
             </li>
         </ul>
         

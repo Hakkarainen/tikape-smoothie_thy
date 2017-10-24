@@ -1,4 +1,3 @@
-
 package tikape.runko.database;
 
 import java.sql.Connection;
@@ -16,29 +15,26 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
     public RaakaAineDao(Database database) {
         this.database = database;
     }
-       
-    public RaakaAine insertOne(RaakaAine ar) throws SQLException {
+
+    public RaakaAine insertOne(RaakaAine ra) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO RaakaAine (nimi) VALUES (?)");
-        stmt.setString(1, ar.getNimi());
-        
-        stmt.executeUpdate();
-        
-        System.out.println("LISÄTÄÄN RAAKA AINE");
+        stmt.setString(1, ra.getNimi());
 
-        //int i = getNewid(connection); Tarvitaanko tätä?
-        //ara.setId(i); 
+        stmt.executeUpdate();
+
+        System.out.println("LISÄTÄÄN RAAKA AINE");
 
         stmt.close();
         connection.close();
-        return ar; 
+        return ra;
     }
 
     @Override
-    public RaakaAine findOne(Integer key) throws SQLException {
+    public RaakaAine findOne(Integer id) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM RaakaAine WHERE key = ?");
-        stmt.setObject(1, key);
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM RaakaAine WHERE id = ?");
+        stmt.setObject(1, id);
 
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
@@ -46,7 +42,7 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
             return null;
         }
 
-        Integer id = rs.getInt("id");
+        id = rs.getInt("id");
         String nimi = rs.getString("nimi");
 
         RaakaAine ra = new RaakaAine(id, nimi);
@@ -57,13 +53,13 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
 
         return ra;
     }
-    
-         public RaakaAine findOneByNimi(String nimi) throws SQLException {
+
+    public RaakaAine findOneByName(String nimi) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM RaakaAine WHERE nimi = ?");
         stmt.setString(1, nimi);
 
-        ResultSet rs = stmt.executeQuery(); 
+        ResultSet rs = stmt.executeQuery();
         RaakaAine ra = null;
         if (rs.next()) {
             ra = new RaakaAine(rs.getInt("id"), rs.getString("nimi"));
@@ -75,18 +71,19 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
 
         return ra;
     }
-    
-        public void insertOne(Integer nimi) throws SQLException {
+
+    public void insertOne(String nimi) throws SQLException {
         Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO Annos(nimi) VALUES (?)");
-        //stmt.setObject(1, key);
+        PreparedStatement stmt = connection.prepareStatement("INSERT INTO RaakaAine (nimi) VALUES (?)");
+        stmt.setObject(1, nimi);
+
+        System.out.println("LISÄTÄÄN UUSI RAAKA-AINE TIETOKANTAAN");
+        stmt.executeUpdate();
 
         stmt.close();
         connection.close();
-
     }
 
-        
     @Override
     public List<RaakaAine> findAll() throws SQLException {
 
@@ -108,14 +105,14 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
 
         return raakaAineet;
     }
-    
+
     public void save(RaakaAine raakaAine) throws SQLException {
         this.database.update("INSERT INTO RaakaAine(nimi) VALUES (?)", raakaAine.getNimi());
     }
-    
+
     @Override
     public void delete(Integer key) throws SQLException {
-        this.database.update("DELETE FROM RaakaAine WHERE id = ?", key);        
+        this.database.update("DELETE FROM RaakaAine WHERE id = ?", key);
     }
 
 }

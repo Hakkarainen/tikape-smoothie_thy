@@ -9,15 +9,15 @@
     <body>
         <h1>Annos raaka-aineet:</h1>
 
-        <ol>
+        <ol>                                                        
             <li th:each= "annosRaakaAine: ${annosResepti}">
-                <span th:text="${annosRaakaAine.get_Raaka_aine_id()}">Valmistusohjeet ?</span> <a th:href="${'/annosRaakaAine/' + annosRaakaAine.get_Raaka_aine_id()}">linkki</a>
+                <span th:text="${annosRaakaAine.name}">annosraaka-aineen nimi</span> <a th:href="@{~/{annosRaakaAine}/(annosRaakaAine=${annosRaakaAine},{id}(id=${annosRaakaAine.id})}">linkki</a>
             </li>
         </ol>
         
         <ul>
             <li>
-                <a href="../annokset">Smoothielistaukseen</a>
+                <a href="/annokset">Smoothielistaukseen</a>
             </li>
         </ul>
         

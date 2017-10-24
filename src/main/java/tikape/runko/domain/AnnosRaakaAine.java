@@ -5,10 +5,10 @@ public class AnnosRaakaAine {
     private Integer annos_id;
     private Integer raaka_aine_id;
     private Integer jarjestys;
-    private Float maara;
+    private Integer maara;
     private String ohje;
 
-    public AnnosRaakaAine(Integer annos_id, Integer raaka_aine_id,  Integer jarjestys, Float maara, String ohje) { 
+    public AnnosRaakaAine(Integer annos_id, Integer raaka_aine_id,  Integer jarjestys, Integer maara, String ohje) { 
         this.annos_id = annos_id;
         this.raaka_aine_id = raaka_aine_id;
         this.jarjestys = jarjestys;
@@ -41,11 +41,11 @@ public class AnnosRaakaAine {
     }
     
     
-    public Float getMaara() {
+    public Integer getMaara() {
         return maara;
     }
 
-    public void setMaara(Float maara) {
+    public void setMaara(Integer maara) {
         this.maara = maara;
     }
 

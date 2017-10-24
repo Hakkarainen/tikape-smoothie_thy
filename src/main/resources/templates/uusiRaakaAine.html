@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Käsittele raaka-aineita</title>
+        <title>Muuta raaka-aineita</title>
     </head>
     <body>
         <h2>Raaka-aineet</h2>
@@ -14,17 +14,17 @@
             </li>
         </ul>
 
-        <h4>Lisää uusi raaka-aine</h4>
+        <h4>Anna uusi raaka-aine</h4>
 
         <form method="POST" action="/uusiRaakaAine">
             Raaka-aineen nimi:<br/>
             <input type="text" name="nimi"/><br/>
-            <input type="submit" value="Lisää"/>
+            <input type="submit" value="Lisaa"/>
         </form>
 
         <ul>
             <li>
-                <a th:href="/annokset">Smoothielistaukseen</a>
+                <a href="/annokset">Smoothielistaukseen</a>
             </li>
         </ul>
     </body>

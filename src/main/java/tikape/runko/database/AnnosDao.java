@@ -22,21 +22,17 @@ public class AnnosDao implements Dao<Annos, Integer> {
     }
     
         
-    public Annos insertOne(Annos a) throws SQLException {
+    public void insertOne(String nimi) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Annos (nimi) VALUES (?)");
-        stmt.setString(1, a.getNimi());
+        stmt.setString(1, nimi);
         
+        System.out.println("LISÄTÄÄN UUSI ANNOS TIETOKANTAAN");
         stmt.executeUpdate();
-        
-        System.out.println("LISÄTÄÄN UUSI ANNOS");
-
-        //int i = getNewid(connection); Tarvitaanko tätä?
-        //ara.setId(i); 
 
         stmt.close();
         connection.close();
-        return a; 
+
     }
 
     @Override
@@ -51,10 +47,9 @@ public class AnnosDao implements Dao<Annos, Integer> {
             return null;
         }
 
-        Integer id = rs.getInt("id");
         String nimi = rs.getString("nimi");
 
-        Annos a = new Annos(id, nimi);
+        Annos a = new Annos(nimi);
 
         rs.close();
         stmt.close();
@@ -63,7 +58,7 @@ public class AnnosDao implements Dao<Annos, Integer> {
         return a;
     }
     
-     public Annos findOneByNimi(String nimi) throws SQLException {
+     public Annos findOneByName(String nimi) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Annos WHERE nimi = ?");
         stmt.setString(1, nimi);
@@ -71,7 +66,7 @@ public class AnnosDao implements Dao<Annos, Integer> {
         ResultSet rs = stmt.executeQuery(); 
         Annos a = null;
         if (rs.next()) {
-            a = new Annos(rs.getInt("id"), rs.getString("nimi"));
+            a = new Annos(rs.getString("nimi"));
         }
 
         rs.close();

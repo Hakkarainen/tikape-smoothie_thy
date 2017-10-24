@@ -9,6 +9,7 @@ import tikape.runko.database.Database;
 import tikape.runko.database.AnnosRaakaAineDao;
 import tikape.runko.database.RaakaAineDao;
 import tikape.runko.domain.Annos;
+import tikape.runko.domain.AnnosRaakaAine;
 import tikape.runko.domain.RaakaAine;
 
 public class Main {
@@ -35,6 +36,15 @@ public class Main {
             return new ModelAndView(map, "annokset");
         }, new ThymeleafTemplateEngine());
 
+        get("/annos", (req, res) -> {
+            HashMap map = new HashMap<>();
+            String nimi = ("nimi");
+            System.out.println(nimi);
+            map.put("annos", annosDao.findOneByName(nimi));
+
+            return new ModelAndView(map, "annos");
+        }, new ThymeleafTemplateEngine());
+
         get("/annos/:id", (req, res) -> {
             HashMap map = new HashMap<>();
             int tmp = Integer.parseInt(req.params("id"));
@@ -42,23 +52,6 @@ public class Main {
             map.put("annos", annosDao.findOne(tmp));
 
             return new ModelAndView(map, "annos");
-        }, new ThymeleafTemplateEngine());
-
-        get("/uusiAnnos", (req, res) -> {
-            HashMap map = new HashMap<>();
-   
-            map.put("annos", annosDao.findOne(tmp));
-
-            return new ModelAndView(map, "annos");
-        }, new ThymeleafTemplateEngine());
-
-        post("/uusiAnnos/:nimi", (req, res) -> {
-            HashMap map = new HashMap<>();
-            String tmp = req.params("nimi");
-            //System.out.println(tmp);
-            map.put("uusiAnnos", annosDao.insertOne(tmp));
-
-            return new ModelAndView(map, "uusiAnnos");
         }, new ThymeleafTemplateEngine());
 
         get("/raakaAineet", (req, res) -> {
@@ -72,18 +65,9 @@ public class Main {
             HashMap map = new HashMap<>();
             int tmp = Integer.parseInt(req.params("id"));
             System.out.println(tmp);
-            map.put("raakaAine", annosDao.findOne(tmp));
+            map.put("raakaAine", raakaAineDao.findOne(tmp));
 
             return new ModelAndView(map, "raakaAine");
-        }, new ThymeleafTemplateEngine());
-
-        post("/uusiRaakaAine/:nimi", (req, res) -> {
-            HashMap map = new HashMap<>();
-            String tmp = req.params("nimi");
-            System.out.println(tmp);
-            map.put("uusiRaakaAine", annosDao.insertOne(tmp));
-
-            return new ModelAndView(map, "uusiRaakaAine");
         }, new ThymeleafTemplateEngine());
 
         get("/annosRaakaAineet", (req, res) -> {
@@ -97,93 +81,113 @@ public class Main {
             HashMap map = new HashMap<>();
             int tmp = Integer.parseInt(req.params("id"));
             System.out.println(tmp);
-            map.put("annosRaakaAine", annosRaakaAineDao.findOne(tmp));
+            map.put("annosRaakaAineet", annosRaakaAineDao.findSmoothie(tmp));
 
-            return new ModelAndView(map, "annosRaakaAine");
+            return new ModelAndView(map, "annosRaakaAineet");
         }, new ThymeleafTemplateEngine());
 
-        get("/annosResepti/:id", (req, res) -> {
+        get("/annosResepti", (req, res) -> {
             HashMap map = new HashMap<>();
-            int tmp = Integer.parseInt(req.params("id"));
-            System.out.println(tmp);
-            map.put("annosResepti", annosRaakaAineDao.findRecipe(tmp));
+            Integer annos_id = Integer.parseInt(req.params("annos_id"));
+            Integer raaka_aine_id = Integer.parseInt(req.params("raaka_aine_id"));
+            System.out.println();
+            System.out.println("annos_id: " + annos_id);
+            System.out.println("raaka_aine_id: " + raaka_aine_id);
+            System.out.println();
+            map.put("annosResepti", annosRaakaAineDao.findRawmaterialRecipe(annos_id, raaka_aine_id));
 
             return new ModelAndView(map, "annosResepti");
         }, new ThymeleafTemplateEngine());
 
-        post("/lisaaAnnosRaakaAineReseptiin/:annoksenNimi :raakaAineenNimi :jarjestys :maara :ohje", (req, res) -> {
-            HashMap map = new HashMap<>();
-            String annoksenNimi = req.params(":annoksenNimi");
-            String raakaAineenNimi = req.params(":raakaAineenNimi");
-            int jarjestys = Integer.parseInt(req.params(":jarjestys"));
-            Float maara = Float.parseFloat(req.params(":maara"));
-            String ohje = req.params(":ohje");
-            System.out.println();
-            System.out.println(":annoksenNimi" + " " + annoksenNimi);
-            System.out.println(":raakaAineenNimi" + " " + raakaAineenNimi);
-            System.out.println(":jarjestys" + " " + jarjestys);
-            System.out.println(":maara" + " " + maara);
-            System.out.println(":ohje" + " " + ohje);
-            System.out.println();
-            map.put("annosRaakaAine", annosRaakaAineDao.mixRecipe(annoksenNimi, raakaAineenNimi, jarjestys, maara, ohje));
-
-            return new ModelAndView(map, "annosRaakaAineet");
-        }, new ThymeleafTemplateEngine());
-        
-
-        // Tämä POST luo uuden annoksen
-        post("/lisaaAnnosRaakaAineReseptiin/:annoksenNimi :raakaAineenNimi :jarjestys :maara :ohje", (req, res) -> {
-            String nimi = req.queryParams("nimi");
-            
-            System.out.println("Luodaan uusi annos");
-            int annos_Id = annosDao.findOneByNimi(req.params("nimi")).getId();
-            annosDao.insertOne(new Annos(annos_Id, nimi));
-            
-            res.redirect("/" + req.params("annos") + "/");
-            
-            return "";
-
-        });  
-        
-         // Tämä POST käsittelee raaka-aineen lisäyksen olemassa olevaan annokseen
-        post("/:tyyppi/:annos", (req, res) -> {
-            String viesti = req.queryParams("viesti");
-            System.out.println("Miksaaja: " + miksaaja + " RaakaAine: " + viesti);
-            
-            Kayttaja k = kayttajaDao.findOne(miksaaja);
-            if(k == null) {
-                System.out.println("Luodaan uusi käyttäjä");
-                k = kayttajaDao.add(new Kayttaja(miksaaja));
-            }
-                
-            int annos = annosDao.findOne(Integer.parseInt(req.params("annos"))).getId();
-            
-            viestiDao.add(new RaakaAine(k.getKayttajaID(), k.getTunnus(), annos, viesti));
-
-            
-            res.redirect("/" + req.params("tyyppi") + "/" + req.params("annos"));
-            return "";
-        });
-    }
-}
-
         get("/uusiAnnos", (req, res) -> {
             HashMap map = new HashMap<>();
-   
-            map.put("annos", annosDao.insertOne(tmp));
-
-            return new ModelAndView(map, "annos");
-        }, new ThymeleafTemplateEngine());
-
-        post("/uusiAnnos/:nimi", (req, res) -> {
-            HashMap map = new HashMap<>();
-            String tmp = req.params("nimi");
-            //System.out.println(tmp);
-            map.put("uusiAnnos", annosDao.insertOne(tmp));
+            map.put("uusiAnnost", annosDao.findAll());
 
             return new ModelAndView(map, "uusiAnnos");
         }, new ThymeleafTemplateEngine());
 
-            res.redirect("/" + req.params("tyyppi") + "/");
-            
+        get("/uusiRaakaAine", (req, res) -> {
+            HashMap map = new HashMap<>();
+            map.put("uusiRaakaAine", raakaAineDao.findAll());
+
+            return new ModelAndView(map, "uusiRaakaAine");
+        }, new ThymeleafTemplateEngine());
+
+        post("/lisaaAnnosRaakaAineReseptiin", (req, res) -> {
+            String annoksenNimi = req.params("annoksenNimi");
+            String raakaAineenNimi = req.params("raakaAineenNimi");
+            Integer jarjestys = Integer.parseInt(req.params("jarjestys"));
+            Integer maara = Integer.parseInt(req.params("maara"));
+            String ohje = req.params("ohje");
+
+            System.out.println();
+            System.out.println("Lisätään raaka-aine annoksen reseptiin: ");
+            System.out.println("annoksen nimi: " + annoksenNimi);
+            System.out.println("raaka-aineen nimi: " + raakaAineenNimi);
+            System.out.println("lisäämisjarjestys: " + jarjestys);
+            System.out.println("raaka-aineenmaara: " + maara);
+            System.out.println("valmistusohje: " + ohje);
+            System.out.println();
+
+            Integer annos_id = annosDao.findOneByName(annoksenNimi).getId();
+            Integer raaka_aine_id = annosDao.findOneByName(raakaAineenNimi).getId();
+
+            AnnosRaakaAine ara = annosRaakaAineDao.findRawmaterialRecipe(annos_id, raaka_aine_id);
+
+            annosRaakaAineDao.mixRecipe(ara);
+
+            res.redirect("/annokset");
             return "";
+        });
+
+        // Tämä POST luo uuden annoksen
+        post("/uusiAnnos/:nimi", (req, res) -> {
+            String nimi = req.queryParams("nimi");
+            System.out.println();
+            System.out.println("Luodaan uusi annos: " + nimi);
+            System.out.println();
+            annosDao.insertOne(nimi);
+
+            res.redirect("/annokset");
+            return "";
+        });
+
+        // Tämä poistaa annoksen
+        post("/poistaAnnos/:nimi", (req, res) -> {
+            String nimi = req.queryParams("nimi");
+            System.out.println();
+            System.out.println("Poista annos: " + nimi);
+            System.out.println();
+            Integer annos_id = annosDao.findOneByName(nimi).getId();
+            annosDao.delete(annos_id);
+
+            res.redirect("/annokset");
+            return "";
+        });
+
+        post("/uusiRaakaAine", (req, res) -> {
+            String nimi = req.params("nimi");
+            System.out.println();
+            System.out.println("Luodaan uusi raaka-aine: " + nimi);
+            System.out.println();
+            raakaAineDao.insertOne(nimi);
+
+            res.redirect("/raakaAineet");
+            return "";
+        });
+
+        // Tämä poistaa raaka-aineen
+        post("/poistaRaakaAine", (req, res) -> {
+            String nimi = req.queryParams("nimi");
+            System.out.println();
+            System.out.println("Poista raaka-aine: " + nimi);
+            System.out.println();
+            Integer raaka_aine_id = annosDao.findOneByName(nimi).getId();
+            annosDao.delete(raaka_aine_id);
+
+            res.redirect("/raakaAineet");
+            return "";
+        });
+
+    }
+}
