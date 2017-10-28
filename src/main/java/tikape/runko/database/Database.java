@@ -54,9 +54,9 @@ public class Database {
 
 //      tietokantataulujen luomiseen tarvittavat komennot suoritusjärjestyksessä
         lista.add("CREATE TABLE Annos (id INTEGER PRIMARY KEY, nimi varchar(100) not null);");
-        lista.add("INSERT INTO Annos (nimi) VALUES ('Mango-banaani pirtelö');");
-        lista.add("INSERT INTO Annos (nimi) VALUES ('Pinaatti-nokkos pirtelö');");
-        lista.add("INSERT INTO Annos (nimi) VALUES ('Mansikka-suklaa pirtelö');");
+        lista.add("INSERT INTO Annos (nimi) VALUES ('Mango-banaani smoothie');");
+        lista.add("INSERT INTO Annos (nimi) VALUES ('Pinaatti-nokkos smoothie');");
+        lista.add("INSERT INTO Annos (nimi) VALUES ('Mansikka-suklaa smoothie');");
 
         lista.add("CREATE TABLE RaakaAine (id INTEGER PRIMARY KEY, nimi varchar(100) not null);");
         lista.add("INSERT INTO RaakaAine (nimi) VALUES ('mango');");
@@ -81,12 +81,12 @@ public class Database {
         lista.add("CREATE TABLE AnnosRaakaAine("
                 + "annos_id integer,"
                 + "raaka_aine_id integer ,"
-                + "jarjestys integer not null,"
-                + "maara integer not null,"
-                + "ohje varchar(255) not null,"
+                + "jarjestys integer default 1,"
+                + "maara integer default 1,"
+                + "ohje varchar(255) default 'Ohjeet',"
                 + "FOREIGN KEY (annos_id) REFERENCES Annos(id),"
                 + "FOREIGN KEY (raaka_aine_id) REFERENCES RaakaAine(id),"
-                + "PRIMARY KEY (annos_id, raaka_aine_id));");
+                + "PRIMARY KEY (annos_id,raaka_aine_id));");
 
         lista.add("INSERT INTO AnnosRaakaAine (annos_id, raaka_aine_id, jarjestys, maara, ohje) "
                 + "VALUES (1, 1, 1, 100, 'Mango-banaani smoothien ohje');");

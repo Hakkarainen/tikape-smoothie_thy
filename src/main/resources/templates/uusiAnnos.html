@@ -12,7 +12,7 @@
 
         <ul>
             <li th:each="annos: ${annokset}">
-                <a th:href="${annos.nimi}">annoksen nimi</a> <a th:href="${'/annosResepti/' + annos.id}">annoksen raaka-aineet</a> (<a th:href="${'/poistaAnnos/' + annos.nimi}}">poista</a>)
+                <a th:href="${annos.nimi}">annoksen nimi</a> <a th:href="${'/findSmoothie/' + annos.id}">annoksen raaka-aineet</a> (<a th:href="${'/poistaAnnos/' + annos.nimi}}">poista</a>)
             </li>
         </ul>
 
@@ -21,11 +21,11 @@
 
         <form method="POST" action="/uusiAnnos/:nimi">
             Smoothien nimi:<br/>
-            <input type="text" name="annoksenNimi" maxlength="100" required="required"/><br/>
+            <input type="text" name="nimi" maxlength="100" required="required"/><br/>
             <input type="submit" value="Lisaa"/>
             <ul>
                 <li th:each="annos: ${annokset}">
-                    <select name="annoksenNimi">
+                    <select name="nimi">
                         <option th:text="${annos.nimi}">Smoothie</option>
                     </select>
                 </li>
@@ -34,9 +34,9 @@
 
         <h4>Miksaa annokseen uusi raaka-aine</h4>
 
-        <form method="POST" action="/lisaaAnnosRaakaAineReseptiin">
+        <form method="POST" action="/lisaaRaakaAineReseptiin">
             Smoothien nimi:<br/>
-            <input type="text" name="nimi" maxlength="100" required="required"/><br/>
+            <input type="text" name="annoksenNimi" maxlength="100" required="required"/><br/>
             <br/>
             Uusi raaka-aine<br/>
             <input type="text" name="raakaAineenNimi" maxlength="100" required="required"/><br/>

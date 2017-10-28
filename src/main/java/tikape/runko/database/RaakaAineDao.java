@@ -16,25 +16,25 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
         this.database = database;
     }
 
-    public RaakaAine insertOne(RaakaAine ra) throws SQLException {
+    public void insertOne(String nimi) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO RaakaAine (nimi) VALUES (?)");
-        stmt.setString(1, ra.getNimi());
-
-        stmt.executeUpdate();
-
+        stmt.setString(1, nimi);
+        
+        System.out.println();
         System.out.println("LISÄTÄÄN RAAKA AINE");
+        System.out.println();
+        stmt.executeUpdate();
 
         stmt.close();
         connection.close();
-        return ra;
     }
 
     @Override
     public RaakaAine findOne(Integer id) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM RaakaAine WHERE id = ?");
-        stmt.setObject(1, id);
+        stmt.setInt(1, id);
 
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
@@ -70,18 +70,6 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
         connection.close();
 
         return ra;
-    }
-
-    public void insertOne(String nimi) throws SQLException {
-        Connection connection = database.getConnection();
-        PreparedStatement stmt = connection.prepareStatement("INSERT INTO RaakaAine (nimi) VALUES (?)");
-        stmt.setObject(1, nimi);
-
-        System.out.println("LISÄTÄÄN UUSI RAAKA-AINE TIETOKANTAAN");
-        stmt.executeUpdate();
-
-        stmt.close();
-        connection.close();
     }
 
     @Override
