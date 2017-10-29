@@ -25,7 +25,7 @@ public class AnnosDao implements Dao<Annos, Integer> {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO Annos (nimi) VALUES (?)");
         stmt.setString(1, nimi);
-        
+
         System.out.println();
         System.out.println("LISÄTÄÄN UUSI ANNOS TIETOKANTAAN");
         System.out.println();
@@ -39,7 +39,7 @@ public class AnnosDao implements Dao<Annos, Integer> {
     public Annos findOne(Integer id) throws SQLException {
         Connection connection = database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Annos WHERE id = ?");
-        stmt.setObject(1, id);
+        stmt.setInt(1, id);
 
         ResultSet rs = stmt.executeQuery();
         boolean hasOne = rs.next();
@@ -47,9 +47,10 @@ public class AnnosDao implements Dao<Annos, Integer> {
             return null;
         }
 
+        id = rs.getInt("id");
         String nimi = rs.getString("nimi");
 
-        Annos a = new Annos(nimi);
+        Annos a = new Annos(id, nimi);
 
         rs.close();
         stmt.close();
@@ -64,10 +65,14 @@ public class AnnosDao implements Dao<Annos, Integer> {
         stmt.setString(1, nimi);
 
         ResultSet rs = stmt.executeQuery();
-        Annos a = null;
-        if (rs.next()) {
-            a = new Annos(rs.getString("nimi"));
+        boolean hasOne = rs.next();
+        if (!hasOne) {
+            return null;
         }
+        Integer id = rs.getInt("id");
+        nimi = rs.getString("nimi");
+        
+        Annos a = new Annos(id, nimi);
 
         rs.close();
         stmt.close();
@@ -103,8 +108,8 @@ public class AnnosDao implements Dao<Annos, Integer> {
     }
 
     @Override
-    public void delete(Integer key) throws SQLException {
-        this.database.update("DELETE FROM Annos WHERE id = ?", key);
+    public void delete(Integer id) throws SQLException {
+        this.database.update("DELETE FROM Annos WHERE id = ?", id);
     }
 
 }

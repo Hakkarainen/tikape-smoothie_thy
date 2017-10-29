@@ -20,7 +20,7 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO RaakaAine (nimi) VALUES (?)");
         stmt.setString(1, nimi);
-        
+
         System.out.println();
         System.out.println("LISÄTÄÄN RAAKA AINE");
         System.out.println();
@@ -60,10 +60,14 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
         stmt.setString(1, nimi);
 
         ResultSet rs = stmt.executeQuery();
-        RaakaAine ra = null;
-        if (rs.next()) {
-            ra = new RaakaAine(rs.getInt("id"), rs.getString("nimi"));
+        boolean hasOne = rs.next();
+        if (!hasOne) {
+            return null;
         }
+        Integer id = rs.getInt("id");
+        nimi = rs.getString("nimi");
+
+        RaakaAine ra = new RaakaAine(id, nimi);
 
         rs.close();
         stmt.close();
@@ -99,8 +103,8 @@ public class RaakaAineDao implements Dao<RaakaAine, Integer> {
     }
 
     @Override
-    public void delete(Integer key) throws SQLException {
-        this.database.update("DELETE FROM RaakaAine WHERE id = ?", key);
+    public void delete(Integer id) throws SQLException {
+        this.database.update("DELETE FROM RaakaAine WHERE id = ?", id);
     }
 
 }

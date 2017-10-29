@@ -20,14 +20,14 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
     public void insertOne(AnnosRaakaAine ara) throws SQLException {
         Connection connection = this.database.getConnection();
         PreparedStatement stmt = connection.prepareStatement("INSERT INTO AnnosRaakaAine (annos_id, raaka_aine_id, jarjestys, maara, ohje) VALUES (?, ?, ?, ?, ?)");
-//        stmt.setInt(1, ara.get_Annos_id());
-//        stmt.setInt(2, ara.get_Raaka_aine_id());
+        stmt.setInt(1, ara.get_Annos_id());
+        stmt.setInt(2, ara.get_Raaka_aine_id());
         stmt.setInt(3, ara.getJarjestys());
         stmt.setInt(4, ara.getMaara());
         stmt.setString(5, ara.getOhje());
 
         System.out.println();
-        System.out.println("LISÄTÄÄN RAAKA AINE ANNOKSEEN");
+        System.out.println("LISÄTÄÄN ANNOS-RAAKA AINE ANNOKSEEN");
         System.out.println();
         stmt.executeUpdate();
 
@@ -86,6 +86,31 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
         return annosRaakaAineetPerAnnos;
     }
 
+        public List<AnnosRaakaAine> findRawMaterial(Integer raaka_aine_id) throws SQLException {
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine WHERE raaka_aine_id = ?");
+        stmt.setObject(1, raaka_aine_id);
+
+        ResultSet rs = stmt.executeQuery();
+
+        List<AnnosRaakaAine> annosRaakaAine = new ArrayList<>();
+        
+        while (rs.next()) {
+            Integer annos_id = rs.getInt("annos_id");
+            Integer jarjestys = rs.getInt("jarjestys");
+            Integer maara = rs.getInt("maara");
+            String ohje = rs.getString("ohje");
+
+            annosRaakaAine.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return annosRaakaAine;
+    }
+    
     @Override
     public AnnosRaakaAine findOne(Integer raaka_aine_id) throws SQLException {
         Connection connection = database.getConnection();
@@ -138,13 +163,38 @@ public class AnnosRaakaAineDao implements Dao<AnnosRaakaAine, Integer> {
 
         return kaikkiAnnosRaakaAineet;
     }
+    
+    public List<AnnosRaakaAine> findSmoothiesWithSpecificRawMaterial(Integer raaka_aine_id) throws SQLException {
+
+        Connection connection = database.getConnection();
+        PreparedStatement stmt = connection.prepareStatement("SELECT * FROM AnnosRaakaAine ARA where ARA.raaka_aine_id = raaka_aine_id ORDER BY raaka_aine_id ASC");
+
+        ResultSet rs = stmt.executeQuery();
+        List<AnnosRaakaAine> kaikkiannoksetJoissaTiettyRaakaAine = new ArrayList<>();
+        while (rs.next()) {
+
+            Integer annos_id = rs.getInt("annos_id");
+            raaka_aine_id = rs.getInt("raaka_aine_id");
+            Integer jarjestys = rs.getInt("jarjestys");
+            Integer maara = rs.getInt("maara");
+            String ohje = rs.getString("ohje");
+
+            kaikkiannoksetJoissaTiettyRaakaAine.add(new AnnosRaakaAine(annos_id, raaka_aine_id, jarjestys, maara, ohje));
+        }
+
+        rs.close();
+        stmt.close();
+        connection.close();
+
+        return kaikkiannoksetJoissaTiettyRaakaAine;
+    }
 
     public void save(AnnosRaakaAine annosRaakaAine) throws SQLException {
         this.database.update("INSERT INTO AnnosRaakaAine(annos_id) VALUES (?)", annosRaakaAine.get_Annos_id());
     }
 
     @Override
-    public void delete(Integer key) throws SQLException {
-        this.database.update("DELETE FROM AnnosRaakaAine WHERE id = ?", key);
+    public void delete(Integer annos_id) throws SQLException {
+        this.database.update("DELETE FROM AnnosRaakaAine WHERE annos_id = ?", annos_id);
     }
 }

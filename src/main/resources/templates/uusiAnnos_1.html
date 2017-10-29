@@ -3,25 +3,25 @@
 
     <head>
         <meta charset="utf-8" />
-        <title>Smoothiet</title>
+        <title>New smoothie</title>
     </head>
 
     <body>
-        <h2>Smoothiet</h2>
+        <h2>Smoothiet:</h2>
 
         <ul>
             <li th:each="annos: ${annokset}">
                 <span th:text="${annos.nimi}"> annoksen nimi </span>
-                <a th:href="'/annosRaakaAine/' + ${annos.id}"> annoksen raaka-aineet </a>(<a th:href="'/poistaAnnos/' + ${annos.nimi}">poista</a>)
+                <a th:href="${'/annosRaakaAine/' + annos.id}"> annoksen raaka-aineet </a>
+                (<a th:href="${'/poistaAnnos/' + annos.nimi}">poista</a>)
             </li>
         </ul>
-
 
         <h4>Lisaa uusi</h4>
 
         <form method="POST" action="/uusiAnnos/:nimi">
             Smoothien nimi:<br/>
-            <input type="text" name="nimi" maxlength="100" required="required"/><br/>
+            <input type="text" name="nimi" maxlength="100" required="required"/>
             <input type="submit" value="Lisaa"/>
         </form>
 
@@ -29,10 +29,19 @@
 
         <form method="POST" action="/lisaaRaakaAineReseptiin">
             Smoothien nimi:<br/>
-            <input type="text" name="annoksenNimi" maxlength="100" required="required"/><br/>
+            <select th:field="*{annos}">
+              <option th:each="annos : ${annokset}" th:value="${annos.nimi}" th:text="#{${annos.nimi}}">smoothien nimi</option>
+            </select>
             <br/>
+            <br/>
+            
             Lisaa raaka-aine<br/>
-            <input type="text" name="raakaAineenNimi" maxlength="100" required="required"/><br/>
+            <select th:field="*{raakaAine}">
+              <option th:each="raakaAine : ${raakaAineet}" th:value="${raakaAine.nimi}" th:text="#{${raakaAine.nimi}}">raaka-aineen nimi</option>
+            </select>
+            <br/>
+
+
             <br/>
             Jarjestys<br/>
             <input type="text" name="jarjestys" required="required"/><br/>
